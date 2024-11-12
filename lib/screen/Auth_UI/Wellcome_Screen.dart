@@ -1,16 +1,19 @@
+// ignore_for_file: must_be_immutable, avoid_unnecessary_containers
+
+import 'package:e_comm/screen/Auth_UI/Signin_Screen.dart';
 import 'package:e_comm/utiles/App-constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 
-class WellcomeScreen extends StatefulWidget {
-  const WellcomeScreen({super.key});
+import '../../contoller/Google_Sign_In_Controller.dart';
 
-  @override
-  State<WellcomeScreen> createState() => _WellcomeScreenState();
-}
+class WellcomeScreen extends StatelessWidget {
+  WellcomeScreen({super.key});
 
-class _WellcomeScreenState extends State<WellcomeScreen> {
+  // ignore: prefer_final_fields
+  SignInController _signInController = Get.put(SignInController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +32,7 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
             Container(
               margin: const EdgeInsets.only(top: 20),
               child: const Text(
-                'Happing Shopping',
+                'Happy Shopping',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
@@ -49,7 +52,9 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
                         width: Get.width / 12,
                         height: Get.height / 1.2,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        _signInController.signInWithGoogle();
+                      },
                       label: const Text(
                         'Sign in with google',
                         style: TextStyle(color: AppConstant.appTextColor),
@@ -70,9 +75,11 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
                         Icons.email,
                         color: AppConstant.appTextColor,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(() => const SignInScreen());
+                      },
                       label: const Text(
-                        '  Sign in with google',
+                        '  Sign in with Email',
                         style: TextStyle(color: AppConstant.appTextColor),
                       ))),
             ),

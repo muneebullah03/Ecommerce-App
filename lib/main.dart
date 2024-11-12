@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'screen/Auth_UI/SignUp_Screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+import 'screen/Auth_UI/Splash_Screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp(
+  await Firebase.initializeApp(
       options: const FirebaseOptions(
           apiKey: "AIzaSyAklRQ4j3iVKEuYl3ukj7ApSX-mLj9qgd8",
           appId: "1:587009739639:web:a2dcf480a7f68325526f72",
@@ -25,7 +27,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const SignUpScreen(),
+      home: const SplashScreen(),
+      builder: EasyLoading.init(),
     );
   }
 }
