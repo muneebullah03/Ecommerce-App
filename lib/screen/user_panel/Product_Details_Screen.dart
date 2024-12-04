@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, avoid_unnecessary_containers, unnecessary_null_comparison
+// ignore_for_file: must_be_immutable, avoid_unnecessary_containers, unnecessary_null_comparison, prefer_const_constructors, empty_statements, deprecated_member_use, duplicate_ignore, prefer_const_declarations
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -10,6 +10,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'Cart_Screen.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   ProductModel productModel;
@@ -33,6 +36,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         centerTitle: true,
         backgroundColor: AppConstant.appSecondryColor,
         elevation: 2,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: GestureDetector(
+                onTap: () {
+                  Get.to(() => CartScreen());
+                },
+                child: Icon(Icons.shopping_cart)),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Padding(
@@ -133,7 +146,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       width: Get.width / 3,
                                       height: Get.height / 16,
                                       child: TextButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          sendMessageOnWhatsApp(
+                                              productModel:
+                                                  widget.productModel);
+                                        },
                                         child: const Text(
                                           'Chat on WhatsApp',
                                           style: TextStyle(
@@ -175,6 +192,24 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
+// chat on whatsapp
+  static Future<void> sendMessageOnWhatsApp(
+      {required ProductModel productModel}) async {
+    final number = "+923009110356";
+    final message =
+        "Hello Muneeb \n I want to know more about this Product${productModel.productName} \n ${productModel.productId} ";
+    final url = "https://wa.me/$number?text=${Uri.encodeComponent(message)}";
+
+    // ignore: deprecated_member_use
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw "Could not lounch $url";
+    }
+  }
+
+  // check product existance
+
   Future<void> checkProductExistance(
       {required String uId, int quantityIncrement = 1}) async {
     // cart database to store products details and user details
@@ -190,8 +225,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       int currentQuantity = snapshot['productQuantity'];
       int updatedQuantity = currentQuantity + quantityIncrement;
 
-      double totalPrice =
-          double.parse(widget.productModel.fullPrice) * updatedQuantity;
+      double totalPrice = double.parse(widget.productModel.isSale
+              ? widget.productModel.salePrice
+              : widget.productModel.fullPrice) *
+          updatedQuantity;
 
       await documentReference.update({
         'productQuantity': updatedQuantity,

@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'package:e_comm/screen/user_panel/All_Products_Screen.dart';
-import 'package:e_comm/screen/user_panel/Cart_Screen.dart';
 import 'package:e_comm/screen/user_panel/Home_screen.dart';
 import 'package:e_comm/utiles/App-constant.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../screen/Auth_UI/Wellcome_Screen.dart';
+import '../screen/user_panel/All_Orders_Screen.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -91,7 +90,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               child: ListTile(
                 onTap: () {
-                  Get.to(() => CartScreen());
+                  Get.to(() => AllOrdersScreen());
                 },
                 title: Text("Orders",
                     style: TextStyle(color: AppConstant.appTextColor)),
